@@ -1,0 +1,509 @@
+#pragma version =0.4.4;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+#include "tact_DexRouter.headers.fc";
+#include "tact_DexRouter.stdlib.fc";
+#include "tact_DexRouter.native.fc";
+#include "tact_DexRouter.constants.fc";
+#include "tact_DexRouter.storage.fc";
+
+;;
+;; Contract DexRouter functions
+;;
+
+(int, int, slice, int, int, int, int) $DexRouter$_contract_init(slice $owner, int $seq) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = (null(), null(), null(), null(), null(), null(), null());
+    $self'seq = $seq;
+    $self'owner = $owner;
+    $self'stopped = false;
+    $self'stonfi_fwd_ton_amount = 185000000;
+    $self'dedust_fwd_ton_amount = 150000000;
+    $self'process_fee = 25000000;
+    $self'minimum_fee = 10000000;
+    return ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee);
+}
+
+((int, int, slice, int, int, int, int), (int, int, slice, int)) $DexRouter$_fun_checkValid((int, int, slice, int, int, int, int) $self, slice $payloadRaw) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    if ($self'stopped) {
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(false, 0, $payloadRaw, 0));
+    }
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $isRight = ($payloadRaw~load_uint(1) != 0);
+    if ($isRight) {
+        slice $payload = $Cell$_fun_asSlice($payloadRaw~load_ref());
+        slice $preloadSlice = preload_bits($payload, 64);
+        int $op = $preloadSlice~load_uint(32);
+        int $transfer_jetton_fee = $preloadSlice~load_uint(32);
+        if (($op == 287440896)) {
+            if (($ctx'value < (((($self'stonfi_fwd_ton_amount + $self'process_fee) + ($transfer_jetton_fee * 2)) + 10000000) + 10000000))) {
+                return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(false, $op, $payload, $transfer_jetton_fee));
+            }
+        }
+        if (($op == 288555008)) {
+            if (($ctx'value < (((($self'dedust_fwd_ton_amount + $self'process_fee) + ($transfer_jetton_fee * 2)) + 10000000) + 10000000))) {
+                return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(false, $op, $payload, $transfer_jetton_fee));
+            }
+        }
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(true, $op, $payload, $transfer_jetton_fee));
+    }
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(false, 0, $payloadRaw, 0));
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_msg_value((int, int, slice, int, int, int, int) $self, int $value) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ($value - $self'process_fee));
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_fun_handleSwapDedustJetton((int, int, slice, int, int, int, int) $self, (int, int, slice, slice) $msg, int $op, slice $payload, int $transfer_jetton_fee) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    var (($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload)) = $msg;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $msg_value = ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_msg_value($ctx'value);
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(dedust_code(), dedust_data($msg'from));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    $global_send($SendParameters$_constructor_value_to_mode_bounce_body_code_data(10000000, $to, 3, false, __gen_cell_comment_699c6c87a420448d54d1c73f35a3be4c077c41a22e102e29a9e97d82cbc232ab(), $opInit'code, $opInit'data));
+    $msg_value = ($msg_value - 10000000);
+    int $forward_ton_amount = ($msg_value - $transfer_jetton_fee);
+    $global_send($SendParameters$_constructor_to_value_mode_bounce_body(__tact_context_get_sender(), $msg_value, 3, false, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $to, $msg'from, null(), $forward_ton_amount, $payload))));
+    $global_emit($JettonPayload$_store_cell($JettonPayload$_constructor_isStonFi_payload(false, $payload)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_fun_handleSwapStonfiJetton((int, int, slice, int, int, int, int) $self, (int, int, slice, slice) $msg, int $op, slice $payload, int $transfer_jetton_fee) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    var (($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload)) = $msg;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $msg_value = ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_msg_value($ctx'value);
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(stonfi_code(), stonfi_data($msg'from));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    $global_send($SendParameters$_constructor_value_to_mode_bounce_body_code_data(10000000, $to, 3, false, __gen_cell_comment_4aafb1a6e03c70ac2bd652da67a3b6227818d8937a6a4a3f11eb59e105666aa8(), $opInit'code, $opInit'data));
+    $msg_value = ($msg_value - 10000000);
+    int $forward_ton_amount = ($msg_value - $transfer_jetton_fee);
+    $global_send($SendParameters$_constructor_to_value_mode_bounce_body(__tact_context_get_sender(), $msg_value, 3, false, $TokenTransfer$_store_cell($TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $to, $msg'from, null(), $forward_ton_amount, $payload))));
+    $global_emit($JettonPayload$_store_cell($JettonPayload$_constructor_isStonFi_payload(true, $payload)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_checkValidForStonfiNative((int, int, slice, int, int, int, int) $self, int $amount) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    if ($self'stopped) {
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), false);
+    }
+    if (($ctx'value < (((($self'stonfi_fwd_ton_amount + $self'process_fee) + 10000000) + 10000000) + $amount))) {
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), false);
+    }
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), true);
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_checkValidForDedustNative((int, int, slice, int, int, int, int) $self, int $amount) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    if ($self'stopped) {
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), false);
+    }
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    if (($ctx'value < (((($self'dedust_fwd_ton_amount + $self'process_fee) + 10000000) + 10000000) + $amount))) {
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), false);
+    }
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), true);
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_getStonfiFwdAmount((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'stonfi_fwd_ton_amount);
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_getSeq((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'seq);
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_getProcessFee((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'process_fee);
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_getMiniumFee((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'minimum_fee);
+}
+
+((int, int, slice, int, int, int, int), slice) $DexRouter$_fun_getUserStonfiProxyAddr((int, int, slice, int, int, int, int) $self, slice $user) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(stonfi_code(), stonfi_data($user));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $to);
+}
+
+((int, int, slice, int, int, int, int), slice) $DexRouter$_fun_getUserDedustProxyAddr((int, int, slice, int, int, int, int) $self, slice $user) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(dedust_code(), dedust_data($user));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $to);
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_fun_requireNotStopped((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    throw_unless(40368, (~ $self'stopped));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_fun_requireStopped((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    throw_unless(53296, $self'stopped);
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_fun_stopped((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'stopped);
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_fun_requireOwner((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    throw_unless(132, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), slice) $DexRouter$_fun_owner((int, int, slice, int, int, int, int) $self) impure inline_ref {
+    var (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), $self'owner);
+}
+
+;;
+;; Receivers of a Contract DexRouter
+;;
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_internal_any_text((int, int, slice, int, int, int, int) $self, slice $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_TokenNotification((int, int, slice, int, int, int, int) $self, (int, int, slice, slice) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload) = $msg;
+    throw_unless(44535, ($msg'amount > 0));
+    slice $payloadRaw = $msg'forward_payload;
+    var ($res'isValid, $res'op, $res'payload, $res'transfer_jetton_fee) = ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_checkValid($payloadRaw);
+    if ((~ $res'isValid)) {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward(__tact_context_get_sender(), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $msg'from, $msg'from, null(), 0, $JettonTransferForwardPayload$_constructor_is_right_value(false, $Cell$_fun_asSlice(__gen_cell_comment_44d850d56a487a70d251151ddcc8e75c7a948f481ce56bf2c4f7b6ad2700e626())))), false, null());
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+    }
+    if (($res'op == 287440896)) {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_handleSwapStonfiJetton(($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload), $res'op, $msg'forward_payload, $res'transfer_jetton_fee);
+    }
+    if (($res'op == 288555008)) {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_handleSwapDedustJetton(($msg'query_id, $msg'amount, $msg'from, $msg'forward_payload), $res'op, $msg'forward_payload, $res'transfer_jetton_fee);
+    }
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_SwapNativeInDedust((int, int, slice, int, int, int, int) $self, (int, int, slice, int, slice, slice, cell, slice, slice) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'query_id, $msg'amount, $msg'pool, $msg'minReturn, $msg'recipient_addr, $msg'referral_addr, $msg'next, $msg'additional_info, $msg'invalidQuery) = $msg;
+    throw_unless(44535, ($msg'amount > 0));
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    throw_unless(26695, ($ctx'value > $self'minimum_fee));
+    $global_emit($AdditionalInfo$_store_cell($AdditionalInfo$_constructor_additional_info($msg'additional_info)));
+    int $isValid = ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_checkValidForDedustNative($msg'amount);
+    if ((~ $isValid)) {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward(__tact_context_get_sender(), __gen_cell_comment_58bd878754d7a40d4aefe55a4f30816bc649c2699de0d338a5a7588e7840885b(), false, null());
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+    }
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(dedust_code(), dedust_data(__tact_context_get_sender()));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward($to, $SwapNativeInDedust$_store_cell(($msg'query_id, $msg'amount, $msg'pool, $msg'minReturn, $msg'recipient_addr, $msg'referral_addr, $msg'next, $msg'additional_info, $msg'invalidQuery)), false, $StateInit$_as_optional(($opInit'code, $opInit'data)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_SwapNativeInStonfi((int, int, slice, int, int, int, int) $self, (int, int, slice, int, slice, slice, slice, slice) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'query_id, $msg'amount, $msg'tokenB, $msg'minReturn, $msg'recipient_addr, $msg'referral_addr, $msg'additional_info, $msg'invalidQuery) = $msg;
+    throw_unless(44535, ($msg'amount > 0));
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    throw_unless(26695, ($ctx'value > $self'minimum_fee));
+    $global_emit($AdditionalInfo$_store_cell($AdditionalInfo$_constructor_additional_info($msg'additional_info)));
+    int $isValid = ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_checkValidForStonfiNative($msg'amount);
+    if ((~ $isValid)) {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward(__tact_context_get_sender(), __gen_cell_comment_58bd878754d7a40d4aefe55a4f30816bc649c2699de0d338a5a7588e7840885b(), false, null());
+        return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+    }
+    var ($opInit'code, $opInit'data) = $StateInit$_constructor_code_data(stonfi_code(), stonfi_data(__tact_context_get_sender()));
+    slice $to = $global_contractAddress(($opInit'code, $opInit'data));
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward($to, $SwapNativeInStonfi$_store_cell(($msg'query_id, $msg'amount, $msg'tokenB, $msg'minReturn, $msg'recipient_addr, $msg'referral_addr, $msg'additional_info, $msg'invalidQuery)), false, $StateInit$_as_optional(($opInit'code, $opInit'data)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_TokenExcesses((int, int, slice, int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'query_id) = $msg;
+    throw_unless(54159, false);
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_ChangeFwdFee((int, int, slice, int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'stonfi_fwd) = $msg;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    $self'stonfi_fwd_ton_amount = $msg'stonfi_fwd;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply(__gen_cell_comment_a4a9a88d183a4eb5bfcaf4957aedffdf9753cde9c51e87344420cec2ad8848cd());
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_ChangeProcessFee((int, int, slice, int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'process_fee) = $msg;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    $self'process_fee = $msg'process_fee;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply(__gen_cell_comment_c9f2d65c6c55798fab41824e269052bdec152e5ba30f0500c81385798c26fbe2());
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_ChangeMinimumFee((int, int, slice, int, int, int, int) $self, (int) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'minimum_fee) = $msg;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    $self'minimum_fee = $msg'minimum_fee;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply(__gen_cell_comment_aa6894605e2553a7675212afcd8d86749db3893085d000672d4558ee2c097fe9());
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_WithdrawInfo((int, int, slice, int, int, int, int) $self, (slice, int, slice, int, int) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'token, $msg'amount, $msg'to, $msg'value, $msg'isNative) = $msg;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    if ($msg'isNative) {
+        $global_send($SendParameters$_constructor_to_value_mode_bounce_body(__tact_not_null($msg'to), __tact_not_null($msg'value), 64, false, __gen_cell_comment_09d8cbd3c5c5eebdb5f44acfa3100003f2249b0553577f2d04f05e088b85d579()));
+    } else {
+        ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_forward(__tact_not_null($msg'token), $JettonTransfer$_store_cell($JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(999, __tact_not_null($msg'amount), __tact_not_null($msg'to), __tact_context_get_sender(), null(), 0, $JettonTransferForwardPayload$_constructor_is_right_value(false, $Cell$_fun_asSlice(__gen_cell_comment_bd20c829d6481c3b2cbea8bc1582b01b3931fe0a117612a22b92cfb3cf8a5edf())))), false, null());
+    }
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_Deploy((int, int, slice, int, int, int, int) $self, (int) $deploy) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($deploy'queryId) = $deploy;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_internal_text_6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df((int, int, slice, int, int, int, int) $self) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireStopped();
+    $self'stopped = false;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply(__gen_cell_comment_514f593ead485926515219a03034c6b162f1c29390f83f2f1bd70b8b77731ec3());
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+((int, int, slice, int, int, int, int), ()) $DexRouter$_internal_text_bcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501((int, int, slice, int, int, int, int) $self) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireNotStopped();
+    $self'stopped = true;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply(__gen_cell_comment_8f4b6a166554b4f282855d0333c627d5b58d281ea4ba11e4def91a1053193b2d());
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+(((int, int, slice, int, int, int, int)), ()) $DexRouter$_internal_binary_ChangeOwner((int, int, slice, int, int, int, int) $self, (int, slice) $msg) impure inline {
+    var ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee) = $self;
+    var ($msg'queryId, $msg'newOwner) = $msg;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_requireOwner();
+    $self'owner = $msg'newOwner;
+    ($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee)~$DexRouter$_fun_reply($ChangeOwnerOk$_store_cell($ChangeOwnerOk$_constructor_queryId_newOwner($msg'queryId, $msg'newOwner)));
+    return (($self'stopped, $self'seq, $self'owner, $self'process_fee, $self'stonfi_fwd_ton_amount, $self'dedust_fwd_ton_amount, $self'minimum_fee), ());
+}
+
+;;
+;; Get methods of a Contract DexRouter
+;;
+
+_ %getStonfiFwdAmount() method_id(86330) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getStonfiFwdAmount();
+    return res;
+}
+
+_ %getSeq() method_id(112801) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getSeq();
+    return res;
+}
+
+_ %getProcessFee() method_id(69571) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getProcessFee();
+    return res;
+}
+
+_ %getMiniumFee() method_id(120025) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getMiniumFee();
+    return res;
+}
+
+_ %getUserStonfiProxyAddr(slice $user) method_id(108133) {
+    slice $user = __tact_verify_address($user);
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getUserStonfiProxyAddr($user);
+    return res;
+}
+
+_ %getUserDedustProxyAddr(slice $user) method_id(65768) {
+    slice $user = __tact_verify_address($user);
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_getUserDedustProxyAddr($user);
+    return res;
+}
+
+_ %stopped() method_id(74107) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_stopped();
+    return res;
+}
+
+_ %owner() method_id(83229) {
+    var self = $DexRouter$_contract_load();
+    var res = self~$DexRouter$_fun_owner();
+    return res;
+}
+
+_ lazy_deployment_completed() method_id {
+    return get_data().begin_parse().load_int(1);
+}
+
+;;
+;; Routing of a Contract DexRouter
+;;
+
+((int, int, slice, int, int, int, int), int) $DexRouter$_contract_router_internal((int, int, slice, int, int, int, int) self, int msg_bounced, slice in_msg) impure inline_ref {
+    ;; Handle bounced messages
+    if (msg_bounced) {
+        return (self, true);
+    }
+    
+    ;; Parse incoming message
+    int op = 0;
+    if (slice_bits(in_msg) >= 32) {
+        op = in_msg.preload_uint(32);
+    }
+    
+    
+    ;; Receive TokenNotification message
+    if (op == 1935855772) {
+        var msg = in_msg~$TokenNotification$_load();
+        self~$DexRouter$_internal_binary_TokenNotification(msg);
+        return (self, true);
+    }
+    
+    ;; Receive SwapNativeInDedust message
+    if (op == 3039744607) {
+        var msg = in_msg~$SwapNativeInDedust$_load();
+        self~$DexRouter$_internal_binary_SwapNativeInDedust(msg);
+        return (self, true);
+    }
+    
+    ;; Receive SwapNativeInStonfi message
+    if (op == 77161560) {
+        var msg = in_msg~$SwapNativeInStonfi$_load();
+        self~$DexRouter$_internal_binary_SwapNativeInStonfi(msg);
+        return (self, true);
+    }
+    
+    ;; Receive TokenExcesses message
+    if (op == 3576854235) {
+        var msg = in_msg~$TokenExcesses$_load();
+        self~$DexRouter$_internal_binary_TokenExcesses(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ChangeFwdFee message
+    if (op == 1728951638) {
+        var msg = in_msg~$ChangeFwdFee$_load();
+        self~$DexRouter$_internal_binary_ChangeFwdFee(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ChangeProcessFee message
+    if (op == 2162290971) {
+        var msg = in_msg~$ChangeProcessFee$_load();
+        self~$DexRouter$_internal_binary_ChangeProcessFee(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ChangeMinimumFee message
+    if (op == 1407651501) {
+        var msg = in_msg~$ChangeMinimumFee$_load();
+        self~$DexRouter$_internal_binary_ChangeMinimumFee(msg);
+        return (self, true);
+    }
+    
+    ;; Receive WithdrawInfo message
+    if (op == 3076232919) {
+        var msg = in_msg~$WithdrawInfo$_load();
+        self~$DexRouter$_internal_binary_WithdrawInfo(msg);
+        return (self, true);
+    }
+    
+    ;; Receive Deploy message
+    if (op == 2490013878) {
+        var msg = in_msg~$Deploy$_load();
+        self~$DexRouter$_internal_binary_Deploy(msg);
+        return (self, true);
+    }
+    
+    ;; Receive ChangeOwner message
+    if (op == 2174598809) {
+        var msg = in_msg~$ChangeOwner$_load();
+        self~$DexRouter$_internal_binary_ChangeOwner(msg);
+        return (self, true);
+    }
+    
+    ;; Text Receivers
+    if (op == 0) {
+        var text_op = slice_hash(in_msg);
+        
+        ;; Receive "Resume" message
+        if (text_op == 0x6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df) {
+            self~$DexRouter$_internal_text_6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df();
+            return (self, true);
+        }
+        
+        ;; Receive "Stop" message
+        if (text_op == 0xbcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501) {
+            self~$DexRouter$_internal_text_bcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501();
+            return (self, true);
+        }
+        if (slice_bits(in_msg) >= 32) {
+            self~$DexRouter$_internal_any_text(in_msg.skip_bits(32));
+            return (self, true);
+        }
+    }
+    
+    return (self, false);
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    var msg_flags = cs~load_uint(4);
+    var msg_bounced = -(msg_flags & 1);
+    slice msg_sender_addr = __tact_verify_address(cs~load_msg_addr());
+    __tact_context = (msg_bounced, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var self = $DexRouter$_contract_load();
+    
+    ;; Handle operation
+    int handled = self~$DexRouter$_contract_router_internal(msg_bounced, in_msg);
+    
+    ;; Throw if not handled
+    throw_unless(130, handled);
+    
+    ;; Persist state
+    $DexRouter$_contract_store(self);
+}

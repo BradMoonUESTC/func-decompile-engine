@@ -1,0 +1,439 @@
+;;
+;; Type: StateInit
+;; TLB: _ code:^cell data:^cell = StateInit
+;;
+
+((cell, cell)) $StateInit$_not_null(tuple v) inline {
+    throw_if(128, null?(v));
+    var (cell vvv'code, cell vvv'data) = __tact_tuple_destroy_2(v);
+    return (vvv'code, vvv'data);
+}
+
+tuple $StateInit$_as_optional((cell, cell) v) inline {
+    var (v'code, v'data) = v;
+    return __tact_tuple_create_2(v'code, v'data);
+}
+
+((cell, cell)) $StateInit$_constructor_code_data(cell $code, cell $data) inline {
+    return ($code, $data);
+}
+
+;;
+;; Type: SendParameters
+;; TLB: _ bounce:bool to:address value:int257 mode:int257 body:Maybe ^cell code:Maybe ^cell data:Maybe ^cell = SendParameters
+;;
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_value_to_mode_bounce_body_code_data(int $value, slice $to, int $mode, int $bounce, cell $body, cell $code, cell $data) inline {
+    return ($bounce, $to, $value, $mode, $body, $code, $data);
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_bounce_body(slice $to, int $value, int $mode, int $bounce, cell $body) inline {
+    return ($bounce, $to, $value, $mode, $body, null(), null());
+}
+
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int $bounce, slice $to, int $value, int $mode, cell $body, cell $code, cell $data) inline {
+    return ($bounce, $to, $value, $mode, $body, $code, $data);
+}
+
+;;
+;; Type: ChangeOwner
+;; Header: 0x819dbe99
+;; TLB: change_owner#819dbe99 queryId:uint64 newOwner:address = ChangeOwner
+;;
+
+(slice, ((int, slice))) $ChangeOwner$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2174598809);
+    var v'queryId = sc_0~load_uint(64);
+    var v'newOwner = sc_0~__tact_load_address();
+    return (sc_0, (v'queryId, v'newOwner));
+}
+
+;;
+;; Type: ChangeOwnerOk
+;; Header: 0x327b2b4a
+;; TLB: change_owner_ok#327b2b4a queryId:uint64 newOwner:address = ChangeOwnerOk
+;;
+
+builder $ChangeOwnerOk$_store(builder build_0, (int, slice) v) inline {
+    var (v'queryId, v'newOwner) = v;
+    build_0 = store_uint(build_0, 846932810, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    build_0 = __tact_store_address(build_0, v'newOwner);
+    return build_0;
+}
+
+cell $ChangeOwnerOk$_store_cell((int, slice) v) inline {
+    return $ChangeOwnerOk$_store(begin_cell(), v).end_cell();
+}
+
+((int, slice)) $ChangeOwnerOk$_constructor_queryId_newOwner(int $queryId, slice $newOwner) inline {
+    return ($queryId, $newOwner);
+}
+
+;;
+;; Type: Deploy
+;; Header: 0x946a98b6
+;; TLB: deploy#946a98b6 queryId:uint64 = Deploy
+;;
+
+(slice, ((int))) $Deploy$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2490013878);
+    var v'queryId = sc_0~load_uint(64);
+    return (sc_0, (v'queryId));
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v) inline {
+    return $DeployOk$_store(begin_cell(), v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline {
+    return ($queryId);
+}
+
+;;
+;; Type: JettonTransferForwardPayload
+;; TLB: _ is_right:bool value:remainder<slice> = JettonTransferForwardPayload
+;;
+
+builder $JettonTransferForwardPayload$_store(builder build_0, (int, slice) v) inline {
+    var (v'is_right, v'value) = v;
+    build_0 = build_0.store_int(v'is_right, 1);
+    build_0 = build_0.store_slice(v'value);
+    return build_0;
+}
+
+((int, slice)) $JettonTransferForwardPayload$_constructor_is_right_value(int $is_right, slice $value) inline {
+    return ($is_right, $value);
+}
+
+;;
+;; Type: TokenTransfer
+;; Header: 0x0f8a7ea5
+;; TLB: token_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:Maybe address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = TokenTransfer
+;;
+
+builder $TokenTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, slice) v) inline_ref {
+    var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload) = v;
+    build_0 = store_uint(build_0, 260734629, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'destination);
+    build_0 = __tact_store_address_opt(build_0, v'response_destination);
+    build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
+    build_0 = build_0.store_coins(v'forward_ton_amount);
+    build_0 = build_0.store_slice(v'forward_payload);
+    return build_0;
+}
+
+cell $TokenTransfer$_store_cell((int, int, slice, slice, cell, int, slice) v) inline {
+    return $TokenTransfer$_store(begin_cell(), v).end_cell();
+}
+
+((int, int, slice, slice, cell, int, slice)) $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int $query_id, int $amount, slice $destination, slice $response_destination, cell $custom_payload, int $forward_ton_amount, slice $forward_payload) inline {
+    return ($query_id, $amount, $destination, $response_destination, $custom_payload, $forward_ton_amount, $forward_payload);
+}
+
+;;
+;; Type: JettonTransfer
+;; Header: 0x0f8a7ea5
+;; TLB: jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:Maybe address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:JettonTransferForwardPayload{is_right:bool,value:remainder<slice>} = JettonTransfer
+;;
+
+builder $JettonTransfer$_store(builder build_0, (int, int, slice, slice, cell, int, (int, slice)) v) inline_ref {
+    var (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, (v'forward_payload'is_right, v'forward_payload'value)) = v;
+    build_0 = store_uint(build_0, 260734629, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'destination);
+    build_0 = __tact_store_address_opt(build_0, v'response_destination);
+    build_0 = ~ null?(v'custom_payload) ? build_0.store_int(true, 1).store_ref(v'custom_payload) : build_0.store_int(false, 1);
+    build_0 = build_0.store_coins(v'forward_ton_amount);
+    build_0 = $JettonTransferForwardPayload$_store(build_0, (v'forward_payload'is_right, v'forward_payload'value));
+    return build_0;
+}
+
+cell $JettonTransfer$_store_cell((int, int, slice, slice, cell, int, (int, slice)) v) inline {
+    return $JettonTransfer$_store(begin_cell(), v).end_cell();
+}
+
+((int, int, slice, slice, cell, int, (int, slice))) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int $query_id, int $amount, slice $destination, slice $response_destination, cell $custom_payload, int $forward_ton_amount, (int, slice) $forward_payload) inline {
+    return ($query_id, $amount, $destination, $response_destination, $custom_payload, $forward_ton_amount, $forward_payload);
+}
+
+;;
+;; Type: TokenNotification
+;; Header: 0x7362d09c
+;; TLB: token_notification#7362d09c query_id:uint64 amount:coins from:address forward_payload:remainder<slice> = TokenNotification
+;;
+
+(slice, ((int, int, slice, slice))) $TokenNotification$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1935855772);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'from = sc_0~__tact_load_address();
+    var v'forward_payload = sc_0;
+    return (sc_0, (v'query_id, v'amount, v'from, v'forward_payload));
+}
+
+;;
+;; Type: TokenExcesses
+;; Header: 0xd53276db
+;; TLB: token_excesses#d53276db query_id:uint64 = TokenExcesses
+;;
+
+(slice, ((int))) $TokenExcesses$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3576854235);
+    var v'query_id = sc_0~load_uint(64);
+    return (sc_0, (v'query_id));
+}
+
+;;
+;; Type: SwapNativeInDedust
+;; Header: 0xb52ed25f
+;; TLB: swap_native_in_dedust#b52ed25f query_id:uint64 amount:coins pool:address minReturn:coins recipient_addr:Maybe address referral_addr:Maybe address next:Maybe ^cell additional_info:Maybe ^slice invalidQuery:remainder<slice> = SwapNativeInDedust
+;;
+
+builder $SwapNativeInDedust$_store(builder build_0, (int, int, slice, int, slice, slice, cell, slice, slice) v) inline_ref {
+    var (v'query_id, v'amount, v'pool, v'minReturn, v'recipient_addr, v'referral_addr, v'next, v'additional_info, v'invalidQuery) = v;
+    build_0 = store_uint(build_0, 3039744607, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'pool);
+    build_0 = build_0.store_coins(v'minReturn);
+    build_0 = __tact_store_address_opt(build_0, v'recipient_addr);
+    var build_1 = begin_cell();
+    build_1 = __tact_store_address_opt(build_1, v'referral_addr);
+    build_1 = ~ null?(v'next) ? build_1.store_int(true, 1).store_ref(v'next) : build_1.store_int(false, 1);
+    build_1 = ~ null?(v'additional_info) ? build_1.store_int(true, 1).store_ref(begin_cell().store_slice(v'additional_info).end_cell()) : build_1.store_int(false, 1);
+    build_1 = build_1.store_slice(v'invalidQuery);
+    build_0 = store_ref(build_0, build_1.end_cell());
+    return build_0;
+}
+
+cell $SwapNativeInDedust$_store_cell((int, int, slice, int, slice, slice, cell, slice, slice) v) inline {
+    return $SwapNativeInDedust$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((int, int, slice, int, slice, slice, cell, slice, slice))) $SwapNativeInDedust$_load(slice sc_0) inline_ref {
+    throw_unless(129, sc_0~load_uint(32) == 3039744607);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'pool = sc_0~__tact_load_address();
+    var v'minReturn = sc_0~load_coins();
+    var v'recipient_addr = sc_0~__tact_load_address_opt();
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'referral_addr = sc_1~__tact_load_address_opt();
+    var v'next = sc_1~load_int(1) ? sc_1~load_ref() : null();
+    var v'additional_info = sc_1~load_int(1) ? sc_1~load_ref().begin_parse() : null();
+    var v'invalidQuery = sc_1;
+    return (sc_0, (v'query_id, v'amount, v'pool, v'minReturn, v'recipient_addr, v'referral_addr, v'next, v'additional_info, v'invalidQuery));
+}
+
+;;
+;; Type: ValidInfo
+;; TLB: _ isValid:bool op:uint32 payload:^slice transfer_jetton_fee:uint32 = ValidInfo
+;;
+
+((int, int, slice, int)) $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee(int $isValid, int $op, slice $payload, int $transfer_jetton_fee) inline {
+    return ($isValid, $op, $payload, $transfer_jetton_fee);
+}
+
+;;
+;; Type: JettonPayload
+;; TLB: _ isStonFi:bool payload:^slice = JettonPayload
+;;
+
+builder $JettonPayload$_store(builder build_0, (int, slice) v) inline {
+    var (v'isStonFi, v'payload) = v;
+    build_0 = build_0.store_int(v'isStonFi, 1);
+    build_0 = build_0.store_ref(begin_cell().store_slice(v'payload).end_cell());
+    return build_0;
+}
+
+cell $JettonPayload$_store_cell((int, slice) v) inline {
+    return $JettonPayload$_store(begin_cell(), v).end_cell();
+}
+
+((int, slice)) $JettonPayload$_constructor_isStonFi_payload(int $isStonFi, slice $payload) inline {
+    return ($isStonFi, $payload);
+}
+
+;;
+;; Type: AdditionalInfo
+;; TLB: _ additional_info:Maybe ^slice = AdditionalInfo
+;;
+
+builder $AdditionalInfo$_store(builder build_0, (slice) v) inline {
+    var (v'additional_info) = v;
+    build_0 = ~ null?(v'additional_info) ? build_0.store_int(true, 1).store_ref(begin_cell().store_slice(v'additional_info).end_cell()) : build_0.store_int(false, 1);
+    return build_0;
+}
+
+cell $AdditionalInfo$_store_cell((slice) v) inline {
+    return $AdditionalInfo$_store(begin_cell(), v).end_cell();
+}
+
+((slice)) $AdditionalInfo$_constructor_additional_info(slice $additional_info) inline {
+    return ($additional_info);
+}
+
+;;
+;; Type: SwapNativeInStonfi
+;; Header: 0x04996458
+;; TLB: swap_native_in_stonfi#04996458 query_id:uint64 amount:coins tokenB:address minReturn:coins recipient_addr:address referral_addr:Maybe address additional_info:Maybe ^slice invalidQuery:remainder<slice> = SwapNativeInStonfi
+;;
+
+builder $SwapNativeInStonfi$_store(builder build_0, (int, int, slice, int, slice, slice, slice, slice) v) inline_ref {
+    var (v'query_id, v'amount, v'tokenB, v'minReturn, v'recipient_addr, v'referral_addr, v'additional_info, v'invalidQuery) = v;
+    build_0 = store_uint(build_0, 77161560, 32);
+    build_0 = build_0.store_uint(v'query_id, 64);
+    build_0 = build_0.store_coins(v'amount);
+    build_0 = __tact_store_address(build_0, v'tokenB);
+    build_0 = build_0.store_coins(v'minReturn);
+    build_0 = __tact_store_address(build_0, v'recipient_addr);
+    var build_1 = begin_cell();
+    build_1 = __tact_store_address_opt(build_1, v'referral_addr);
+    build_1 = ~ null?(v'additional_info) ? build_1.store_int(true, 1).store_ref(begin_cell().store_slice(v'additional_info).end_cell()) : build_1.store_int(false, 1);
+    build_1 = build_1.store_slice(v'invalidQuery);
+    build_0 = store_ref(build_0, build_1.end_cell());
+    return build_0;
+}
+
+cell $SwapNativeInStonfi$_store_cell((int, int, slice, int, slice, slice, slice, slice) v) inline {
+    return $SwapNativeInStonfi$_store(begin_cell(), v).end_cell();
+}
+
+(slice, ((int, int, slice, int, slice, slice, slice, slice))) $SwapNativeInStonfi$_load(slice sc_0) inline_ref {
+    throw_unless(129, sc_0~load_uint(32) == 77161560);
+    var v'query_id = sc_0~load_uint(64);
+    var v'amount = sc_0~load_coins();
+    var v'tokenB = sc_0~__tact_load_address();
+    var v'minReturn = sc_0~load_coins();
+    var v'recipient_addr = sc_0~__tact_load_address();
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'referral_addr = sc_1~__tact_load_address_opt();
+    var v'additional_info = sc_1~load_int(1) ? sc_1~load_ref().begin_parse() : null();
+    var v'invalidQuery = sc_1;
+    return (sc_0, (v'query_id, v'amount, v'tokenB, v'minReturn, v'recipient_addr, v'referral_addr, v'additional_info, v'invalidQuery));
+}
+
+;;
+;; Type: WithdrawInfo
+;; Header: 0xb75b96d7
+;; TLB: withdraw_info#b75b96d7 token:Maybe address amount:Maybe coins to:Maybe address value:Maybe coins isNative:bool = WithdrawInfo
+;;
+
+(slice, ((slice, int, slice, int, int))) $WithdrawInfo$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 3076232919);
+    var v'token = sc_0~__tact_load_address_opt();
+    var v'amount = sc_0~load_int(1) ? sc_0~load_coins() : null();
+    var v'to = sc_0~__tact_load_address_opt();
+    var v'value = sc_0~load_int(1) ? sc_0~load_coins() : null();
+    var v'isNative = sc_0~load_int(1);
+    return (sc_0, (v'token, v'amount, v'to, v'value, v'isNative));
+}
+
+;;
+;; Type: ChangeFwdFee
+;; Header: 0x670db556
+;; TLB: change_fwd_fee#670db556 stonfi_fwd:uint64 = ChangeFwdFee
+;;
+
+(slice, ((int))) $ChangeFwdFee$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1728951638);
+    var v'stonfi_fwd = sc_0~load_uint(64);
+    return (sc_0, (v'stonfi_fwd));
+}
+
+;;
+;; Type: ChangeProcessFee
+;; Header: 0x80e1f11b
+;; TLB: change_process_fee#80e1f11b process_fee:uint64 = ChangeProcessFee
+;;
+
+(slice, ((int))) $ChangeProcessFee$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2162290971);
+    var v'process_fee = sc_0~load_uint(64);
+    return (sc_0, (v'process_fee));
+}
+
+;;
+;; Type: ChangeMinimumFee
+;; Header: 0x53e70ead
+;; TLB: change_minimum_fee#53e70ead minimum_fee:uint64 = ChangeMinimumFee
+;;
+
+(slice, ((int))) $ChangeMinimumFee$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 1407651501);
+    var v'minimum_fee = sc_0~load_uint(64);
+    return (sc_0, (v'minimum_fee));
+}
+
+;;
+;; Type: DexRouter
+;;
+
+builder $DexRouter$_store(builder build_0, (int, int, slice, int, int, int, int) v) inline {
+    var (v'stopped, v'seq, v'owner, v'process_fee, v'stonfi_fwd_ton_amount, v'dedust_fwd_ton_amount, v'minimum_fee) = v;
+    build_0 = build_0.store_int(v'stopped, 1);
+    build_0 = build_0.store_uint(v'seq, 64);
+    build_0 = __tact_store_address(build_0, v'owner);
+    build_0 = build_0.store_uint(v'process_fee, 64);
+    build_0 = build_0.store_uint(v'stonfi_fwd_ton_amount, 64);
+    build_0 = build_0.store_uint(v'dedust_fwd_ton_amount, 64);
+    build_0 = build_0.store_uint(v'minimum_fee, 64);
+    return build_0;
+}
+
+(slice, ((int, int, slice, int, int, int, int))) $DexRouter$_load(slice sc_0) inline {
+    var v'stopped = sc_0~load_int(1);
+    var v'seq = sc_0~load_uint(64);
+    var v'owner = sc_0~__tact_load_address();
+    var v'process_fee = sc_0~load_uint(64);
+    var v'stonfi_fwd_ton_amount = sc_0~load_uint(64);
+    var v'dedust_fwd_ton_amount = sc_0~load_uint(64);
+    var v'minimum_fee = sc_0~load_uint(64);
+    return (sc_0, (v'stopped, v'seq, v'owner, v'process_fee, v'stonfi_fwd_ton_amount, v'dedust_fwd_ton_amount, v'minimum_fee));
+}
+
+(slice, ((slice, int))) $DexRouter$init$_load(slice sc_0) inline {
+    var v'owner = sc_0~__tact_load_address();
+    var v'seq = sc_0~load_int(257);
+    return (sc_0, (v'owner, v'seq));
+}
+
+(int, int, slice, int, int, int, int) $DexRouter$_contract_load() impure inline_ref {
+    slice $sc = get_data().begin_parse();
+    __tact_context_sys = $sc~load_ref();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$DexRouter$_load();
+    } else {
+        ;; Allow only workchain deployments
+        throw_unless(137, my_address().preload_uint(11) == 1024);
+        (slice $owner, int $seq) = $sc~$DexRouter$init$_load();
+        $sc.end_parse();
+        return $DexRouter$_contract_init($owner, $seq);
+    }
+}
+
+() $DexRouter$_contract_store((int, int, slice, int, int, int, int) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_ref(__tact_context_sys);
+    b = b.store_int(true, 1);
+    b = $DexRouter$_store(b, v);
+    set_data(b.end_cell());
+}

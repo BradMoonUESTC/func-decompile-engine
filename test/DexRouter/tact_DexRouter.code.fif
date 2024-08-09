@@ -1,0 +1,1862 @@
+PROGRAM{
+  DECLPROC __tact_verify_address
+  DECLPROC __tact_load_address
+  DECLPROC __tact_load_address_opt
+  DECLPROC __tact_store_address
+  DECLPROC __tact_store_address_opt
+  DECLPROC __tact_create_address
+  DECLPROC __tact_compute_contract_address
+  DECLPROC __tact_my_balance
+  DECLPROC __tact_not_null
+  DECLPROC __tact_context_get
+  DECLPROC __tact_context_get_sender
+  DECLPROC __tact_store_bool
+  DECLPROC __tact_slice_eq_bits
+  DECLPROC $ChangeOwner$_load
+  DECLPROC $ChangeOwnerOk$_store
+  DECLPROC $ChangeOwnerOk$_store_cell
+  DECLPROC $Deploy$_load
+  DECLPROC $DeployOk$_store
+  DECLPROC $DeployOk$_store_cell
+  DECLPROC $JettonTransferForwardPayload$_store
+  DECLPROC $TokenTransfer$_store
+  DECLPROC $TokenTransfer$_store_cell
+  DECLPROC $JettonTransfer$_store
+  DECLPROC $JettonTransfer$_store_cell
+  DECLPROC $TokenNotification$_load
+  DECLPROC $TokenExcesses$_load
+  DECLPROC $SwapNativeInDedust$_store
+  DECLPROC $SwapNativeInDedust$_store_cell
+  DECLPROC $SwapNativeInDedust$_load
+  DECLPROC $JettonPayload$_store
+  DECLPROC $JettonPayload$_store_cell
+  DECLPROC $AdditionalInfo$_store
+  DECLPROC $AdditionalInfo$_store_cell
+  DECLPROC $SwapNativeInStonfi$_store
+  DECLPROC $SwapNativeInStonfi$_store_cell
+  DECLPROC $SwapNativeInStonfi$_load
+  DECLPROC $WithdrawInfo$_load
+  DECLPROC $ChangeFwdFee$_load
+  DECLPROC $ChangeProcessFee$_load
+  DECLPROC $ChangeMinimumFee$_load
+  DECLPROC $DexRouter$_store
+  DECLPROC $DexRouter$_load
+  DECLPROC $StateInit$_not_null
+  DECLPROC $StateInit$_as_optional
+  DECLPROC $DexRouter$init$_load
+  DECLPROC $DexRouter$_contract_init
+  DECLPROC $DexRouter$_contract_load
+  DECLPROC $DexRouter$_contract_store
+  DECLPROC $global_contractAddress
+  DECLPROC $global_send
+  DECLPROC $global_emit
+  DECLPROC $Cell$_fun_asSlice
+  DECLPROC $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee
+  DECLPROC $DexRouter$_fun_checkValid
+  DECLPROC $StateInit$_constructor_code_data
+  DECLPROC $SendParameters$_constructor_value_to_mode_bounce_body_code_data
+  DECLPROC $SendParameters$_constructor_to_value_mode_bounce_body
+  DECLPROC $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+  DECLPROC $JettonPayload$_constructor_isStonFi_payload
+  DECLPROC $DexRouter$_fun_msg_value
+  DECLPROC $DexRouter$_fun_handleSwapDedustJetton
+  DECLPROC $DexRouter$_fun_handleSwapStonfiJetton
+  DECLPROC $DexRouter$_fun_checkValidForStonfiNative
+  DECLPROC $DexRouter$_fun_checkValidForDedustNative
+  DECLPROC $DexRouter$_fun_getStonfiFwdAmount
+  DECLPROC $DexRouter$_fun_getSeq
+  DECLPROC $DexRouter$_fun_getProcessFee
+  DECLPROC $DexRouter$_fun_getMiniumFee
+  DECLPROC $DexRouter$_fun_getUserStonfiProxyAddr
+  DECLPROC $DexRouter$_fun_getUserDedustProxyAddr
+  DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+  DECLPROC $DexRouter$_fun_forward
+  DECLPROC $DexRouter$_fun_reply
+  DECLPROC $DexRouter$_fun_notify
+  DECLPROC $DexRouter$_fun_requireNotStopped
+  DECLPROC $DexRouter$_fun_requireStopped
+  DECLPROC $DexRouter$_fun_stopped
+  DECLPROC $DexRouter$_fun_requireOwner
+  DECLPROC $DexRouter$_fun_owner
+  DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
+  DECLPROC $JettonTransferForwardPayload$_constructor_is_right_value
+  DECLPROC $AdditionalInfo$_constructor_additional_info
+  DECLPROC $DeployOk$_constructor_queryId
+  DECLPROC $ChangeOwnerOk$_constructor_queryId_newOwner
+  DECLPROC stonfi_data
+  DECLPROC dedust_data
+  DECLPROC $DexRouter$_internal_any_text
+  DECLPROC $DexRouter$_internal_binary_TokenNotification
+  DECLPROC $DexRouter$_internal_binary_SwapNativeInDedust
+  DECLPROC $DexRouter$_internal_binary_SwapNativeInStonfi
+  DECLPROC $DexRouter$_internal_binary_TokenExcesses
+  DECLPROC $DexRouter$_internal_binary_ChangeFwdFee
+  DECLPROC $DexRouter$_internal_binary_ChangeProcessFee
+  DECLPROC $DexRouter$_internal_binary_ChangeMinimumFee
+  DECLPROC $DexRouter$_internal_binary_WithdrawInfo
+  DECLPROC $DexRouter$_internal_binary_Deploy
+  DECLPROC $DexRouter$_internal_text_6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df
+  DECLPROC $DexRouter$_internal_text_bcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501
+  DECLPROC $DexRouter$_internal_binary_ChangeOwner
+  86330 DECLMETHOD %getStonfiFwdAmount
+  112801 DECLMETHOD %getSeq
+  69571 DECLMETHOD %getProcessFee
+  120025 DECLMETHOD %getMiniumFee
+  108133 DECLMETHOD %getUserStonfiProxyAddr
+  65768 DECLMETHOD %getUserDedustProxyAddr
+  74107 DECLMETHOD %stopped
+  83229 DECLMETHOD %owner
+  115390 DECLMETHOD lazy_deployment_completed
+  DECLPROC $DexRouter$_contract_router_internal
+  DECLPROC recv_internal
+  DECLGLOBVAR __tact_context
+  DECLGLOBVAR __tact_context_sender
+  DECLGLOBVAR __tact_context_sys
+  DECLGLOBVAR __tact_randomized
+  __tact_verify_address PROCINLINE:<{
+    DUP
+    SBITS
+    267 PUSHINT
+    EQUAL
+    136 THROWIFNOT
+    DUP
+    11 PLDU
+    DUP
+    1279 PUSHINT
+    EQUAL
+    137 THROWIF
+    10 PUSHPOW2
+    EQUAL
+    136 THROWIFNOT
+  }>
+  __tact_load_address PROCINLINE:<{
+    LDMSGADDR
+    SWAP
+    __tact_verify_address INLINECALLDICT
+  }>
+  __tact_load_address_opt PROCINLINE:<{
+    DUP
+    2 PLDU
+    0 NEQINT
+    IF:<{
+      LDMSGADDR
+      SWAP
+      __tact_verify_address INLINECALLDICT
+    }>ELSE<{
+      2 PUSHINT
+      SDSKIPFIRST
+      PUSHNULL
+    }>
+  }>
+  __tact_store_address PROCINLINE:<{
+    __tact_verify_address INLINECALLDICT
+    STSLICER
+  }>
+  __tact_store_address_opt PROCINLINE:<{
+    DUP
+    ISNULL
+    IF:<{
+      DROP
+      0 PUSHINT
+      SWAP
+      2 STU
+    }>ELSE<{
+      __tact_store_address INLINECALLDICT
+    }>
+  }>
+  __tact_create_address PROCINLINE:<{
+    NEWC
+    2 PUSHINT
+    SWAP
+    2 STU
+    0 PUSHINT
+    SWAP
+    1 STU
+    s1 s2 XCHG
+    8 STI
+    256 STU
+    ENDC
+    CTOS
+    __tact_verify_address INLINECALLDICT
+  }>
+  __tact_compute_contract_address PROCINLINE:<{
+    NEWC
+    0 PUSHINT
+    SWAP
+    2 STU
+    3 PUSHINT
+    SWAP
+    2 STU
+    0 PUSHINT
+    SWAP
+    1 STU
+    s1 s2 XCHG
+    STREF
+    STREF
+    ENDC
+    HASHCU
+    __tact_create_address INLINECALLDICT
+  }>
+  __tact_my_balance PROCINLINE:<{
+    BALANCE
+    FIRST
+  }>
+  __tact_not_null PROCINLINE:<{
+    DUP
+    ISNULL
+    128 THROWIF
+  }>
+  __tact_context_get PROCINLINE:<{
+    __tact_context GETGLOB
+    4 UNTUPLE
+  }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
+  __tact_store_bool PROCINLINE:<{
+    SWAP
+    1 STI
+  }>
+  __tact_slice_eq_bits PROCINLINE:<{
+    SDEQ
+  }>
+  $ChangeOwner$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2174598809 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    __tact_load_address INLINECALLDICT
+    s1 s2 XCHG
+  }>
+  $ChangeOwnerOk$_store PROCINLINE:<{
+    846932810 PUSHINT
+    s0 s3 XCHG2
+    32 STU
+    64 STU
+    SWAP
+    __tact_store_address INLINECALLDICT
+  }>
+  $ChangeOwnerOk$_store_cell PROCINLINE:<{
+    NEWC
+    -ROT
+    $ChangeOwnerOk$_store INLINECALLDICT
+    ENDC
+  }>
+  $Deploy$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2490013878 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $DeployOk$_store PROCINLINE:<{
+    2952335191 PUSHINT
+    ROT
+    32 STU
+    64 STU
+  }>
+  $DeployOk$_store_cell PROCINLINE:<{
+    NEWC
+    SWAP
+    $DeployOk$_store INLINECALLDICT
+    ENDC
+  }>
+  $JettonTransferForwardPayload$_store PROCINLINE:<{
+    s0 s2 XCHG
+    1 STI
+    SWAP
+    STSLICER
+  }>
+  $TokenTransfer$_store PROCREF:<{
+    260734629 PUSHINT
+    s0 s8 XCHG2
+    32 STU
+    s1 s6 XCHG
+    64 STU
+    s0 s4 XCHG2
+    STGRAMS
+    ROT
+    __tact_store_address INLINECALLDICT
+    SWAP
+    __tact_store_address_opt INLINECALLDICT
+    OVER
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      STREF
+    }>ELSE<{
+      FALSE
+      s2 POP
+      1 STI
+    }>
+    SWAP
+    STGRAMS
+    SWAP
+    STSLICER
+  }>
+  $TokenTransfer$_store_cell PROCINLINE:<{
+    NEWC
+    7 -ROLL
+    $TokenTransfer$_store INLINECALLDICT
+    ENDC
+  }>
+  $JettonTransfer$_store PROCREF:<{
+    260734629 PUSHINT
+    s0 s9 XCHG2
+    32 STU
+    s1 s7 XCHG
+    64 STU
+    s0 s5 XCHG2
+    STGRAMS
+    s0 s3 XCHG2
+    __tact_store_address INLINECALLDICT
+    SWAP
+    __tact_store_address_opt INLINECALLDICT
+    OVER
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      STREF
+    }>ELSE<{
+      FALSE
+      s2 POP
+      1 STI
+    }>
+    SWAP
+    STGRAMS
+    s0 s2 XCHG
+    $JettonTransferForwardPayload$_store INLINECALLDICT
+  }>
+  $JettonTransfer$_store_cell PROCINLINE:<{
+    NEWC
+    8 -ROLL
+    $JettonTransfer$_store INLINECALLDICT
+    ENDC
+  }>
+  $TokenNotification$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1935855772 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    LDGRAMS
+    __tact_load_address INLINECALLDICT
+    s3 s0 s3 XC2PU
+    s2 s3 XCHG
+  }>
+  $TokenExcesses$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3576854235 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $SwapNativeInDedust$_store PROCREF:<{
+    3039744607 PUSHINT
+    s0 s10 XCHG2
+    32 STU
+    s1 s8 XCHG
+    64 STU
+    s0 s6 XCHG2
+    STGRAMS
+    s0 s4 XCHG2
+    __tact_store_address INLINECALLDICT
+    ROT
+    STGRAMS
+    SWAP
+    __tact_store_address_opt INLINECALLDICT
+    NEWC
+    ROT
+    __tact_store_address_opt INLINECALLDICT
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      s1 s2 XCHG
+      STREF
+    }>ELSE<{
+      s2 POP
+      FALSE
+      ROT
+      1 STI
+    }>
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      NEWC
+      s0 s3 XCHG2
+      STSLICER
+      ENDC
+      ROT
+      STREF
+    }>ELSE<{
+      s2 POP
+      FALSE
+      ROT
+      1 STI
+    }>
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+  }>
+  $SwapNativeInDedust$_store_cell PROCINLINE:<{
+    NEWC
+    9 -ROLL
+    $SwapNativeInDedust$_store INLINECALLDICT
+    ENDC
+  }>
+  $SwapNativeInDedust$_load PROCREF:<{
+    32 LDU
+    SWAP
+    3039744607 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    LDGRAMS
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    __tact_load_address_opt INLINECALLDICT
+    SWAP
+    LDREF
+    SWAP
+    CTOS
+    __tact_load_address_opt INLINECALLDICT
+    SWAP
+    1 LDI
+    SWAP
+    IF:<{
+      LDREF
+    }>ELSE<{
+      PUSHNULL
+      SWAP
+    }>
+    1 LDI
+    SWAP
+    IF:<{
+      LDREF
+      SWAP
+      CTOS
+    }>ELSE<{
+      PUSHNULL
+    }>
+    s4 s9 XCHG
+    s4 s8 XCHG
+    s4 s7 XCHG
+    s4 s6 XCHG
+    s4 s5 XCHG
+    SWAP
+  }>
+  $JettonPayload$_store PROCINLINE:<{
+    s0 s2 XCHG
+    1 STI
+    NEWC
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+  }>
+  $JettonPayload$_store_cell PROCINLINE:<{
+    NEWC
+    -ROT
+    $JettonPayload$_store INLINECALLDICT
+    ENDC
+  }>
+  $AdditionalInfo$_store PROCINLINE:<{
+    DUP
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      ROT
+      1 STI
+      NEWC
+      ROT
+      STSLICER
+      ENDC
+      SWAP
+      STREF
+    }>ELSE<{
+      DROP
+      FALSE
+      SWAP
+      1 STI
+    }>
+  }>
+  $AdditionalInfo$_store_cell PROCINLINE:<{
+    NEWC
+    SWAP
+    $AdditionalInfo$_store INLINECALLDICT
+    ENDC
+  }>
+  $SwapNativeInStonfi$_store PROCREF:<{
+    77161560 PUSHINT
+    s0 s9 XCHG2
+    32 STU
+    s1 s7 XCHG
+    64 STU
+    s0 s5 XCHG2
+    STGRAMS
+    s0 s3 XCHG2
+    __tact_store_address INLINECALLDICT
+    SWAP
+    STGRAMS
+    SWAP
+    __tact_store_address INLINECALLDICT
+    NEWC
+    ROT
+    __tact_store_address_opt INLINECALLDICT
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      SWAP
+      1 STI
+      NEWC
+      s0 s3 XCHG2
+      STSLICER
+      ENDC
+      ROT
+      STREF
+    }>ELSE<{
+      s2 POP
+      FALSE
+      ROT
+      1 STI
+    }>
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
+  }>
+  $SwapNativeInStonfi$_store_cell PROCINLINE:<{
+    NEWC
+    8 -ROLL
+    $SwapNativeInStonfi$_store INLINECALLDICT
+    ENDC
+  }>
+  $SwapNativeInStonfi$_load PROCREF:<{
+    32 LDU
+    SWAP
+    77161560 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    LDGRAMS
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDGRAMS
+    __tact_load_address INLINECALLDICT
+    SWAP
+    LDREF
+    SWAP
+    CTOS
+    __tact_load_address_opt INLINECALLDICT
+    SWAP
+    1 LDI
+    SWAP
+    IF:<{
+      LDREF
+      SWAP
+      CTOS
+    }>ELSE<{
+      PUSHNULL
+    }>
+    s3 s8 XCHG
+    s3 s7 XCHG
+    s3 s6 XCHG
+    s3 s5 XCHG
+    s3 s4 XCHG
+    SWAP
+  }>
+  $WithdrawInfo$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    3076232919 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    __tact_load_address_opt INLINECALLDICT
+    SWAP
+    1 LDI
+    SWAP
+    IF:<{
+      LDGRAMS
+    }>ELSE<{
+      PUSHNULL
+      SWAP
+    }>
+    __tact_load_address_opt INLINECALLDICT
+    SWAP
+    1 LDI
+    SWAP
+    IF:<{
+      LDGRAMS
+    }>ELSE<{
+      PUSHNULL
+      SWAP
+    }>
+    1 LDI
+    5 -ROLL
+  }>
+  $ChangeFwdFee$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1728951638 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $ChangeProcessFee$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    2162290971 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $ChangeMinimumFee$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    1407651501 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    64 LDU
+    SWAP
+  }>
+  $DexRouter$_store PROCINLINE:<{
+    s6 s7 XCHG2
+    1 STI
+    s1 s4 XCHG
+    64 STU
+    ROT
+    __tact_store_address INLINECALLDICT
+    64 STU
+    64 STU
+    64 STU
+    64 STU
+  }>
+  $DexRouter$_load PROCINLINE:<{
+    1 LDI
+    64 LDU
+    __tact_load_address INLINECALLDICT
+    SWAP
+    64 LDU
+    64 LDU
+    64 LDU
+    64 LDU
+    7 -ROLL
+  }>
+  $StateInit$_not_null PROCINLINE:<{
+    DUP
+    ISNULL
+    128 THROWIF
+    2 UNTUPLE
+  }>
+  $StateInit$_as_optional PROCINLINE:<{
+    2 TUPLE
+  }>
+  $DexRouter$init$_load PROCINLINE:<{
+    __tact_load_address INLINECALLDICT
+    SWAP
+    257 PUSHINT
+    LDIX
+    -ROT
+  }>
+  $DexRouter$_contract_init PROCREF:<{
+    FALSE
+    s0 s2 XCHG
+    185000000 PUSHINT
+    150000000 PUSHINT
+    25000000 PUSHINT
+    -ROT
+    10000000 PUSHINT
+  }>
+  $DexRouter$_contract_load PROCREF:<{
+    c4 PUSH
+    CTOS
+    LDREF
+    SWAP
+    __tact_context_sys SETGLOB
+    1 LDI
+    SWAP
+    IFJMP:<{
+      $DexRouter$_load INLINECALLDICT
+      1 7 BLKDROP2
+    }>
+    MYADDR
+    11 PLDU
+    10 PUSHPOW2
+    EQUAL
+    137 THROWIFNOT
+    $DexRouter$init$_load INLINECALLDICT
+    s0 s2 XCHG
+    ENDS
+    SWAP
+    $DexRouter$_contract_init INLINECALLDICT
+  }>
+  $DexRouter$_contract_store PROCINLINE:<{
+    NEWC
+    __tact_context_sys GETGLOB
+    SWAP
+    STREF
+    TRUE
+    SWAP
+    1 STI
+    7 -ROLL
+    $DexRouter$_store INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  $global_contractAddress PROCINLINE:<{
+    0 PUSHINT
+    -ROT
+    __tact_compute_contract_address INLINECALLDICT
+  }>
+  $global_send PROCREF:<{
+    NEWC
+    1 PUSHINT
+    SWAP
+    2 STI
+    s0 s7 XCHG2
+    __tact_store_bool INLINECALLDICT
+    0 PUSHINT
+    SWAP
+    3 STI
+    s0 s5 XCHG2
+    __tact_store_address INLINECALLDICT
+    s0 s3 XCHG2
+    STGRAMS
+    0 PUSHINT
+    SWAP
+    105 STI
+    s3 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+    }>ELSE<{
+      s4 PUSH
+      ISNULL
+      NOT
+    }>
+    IF:<{
+      TRUE
+      __tact_store_bool INLINECALLDICT
+      NEWC
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      s4 PUSH
+      ISNULL
+      NOT
+      IF:<{
+        TRUE
+        __tact_store_bool INLINECALLDICT
+        s0 s4 XCHG
+        __tact_not_null INLINECALLDICT
+        s0 s4 XCHG2
+        STREF
+      }>ELSE<{
+        s4 POP
+        s0 s3 XCHG
+        FALSE
+        __tact_store_bool INLINECALLDICT
+      }>
+      s4 PUSH
+      ISNULL
+      NOT
+      IF:<{
+        TRUE
+        __tact_store_bool INLINECALLDICT
+        s0 s4 XCHG
+        __tact_not_null INLINECALLDICT
+        s0 s4 XCHG2
+        STREF
+      }>ELSE<{
+        s4 POP
+        s0 s3 XCHG
+        FALSE
+        __tact_store_bool INLINECALLDICT
+      }>
+      FALSE
+      __tact_store_bool INLINECALLDICT
+      s0 s2 XCHG
+      TRUE
+      __tact_store_bool INLINECALLDICT
+      s0 s2 XCHG
+      ENDC
+      ROT
+      STREF
+    }>ELSE<{
+      s3 POP
+      s3 POP
+      SWAP
+      FALSE
+      __tact_store_bool INLINECALLDICT
+    }>
+    OVER
+    ISNULL
+    NOT
+    IF:<{
+      TRUE
+      __tact_store_bool INLINECALLDICT
+      SWAP
+      __tact_not_null INLINECALLDICT
+      SWAP
+      STREF
+    }>ELSE<{
+      NIP
+      FALSE
+      __tact_store_bool INLINECALLDICT
+    }>
+    ENDC
+    SWAP
+    SENDRAWMSG
+  }>
+  $global_emit PROCINLINE:<{
+    NEWC
+    15211807202738752817960438464513 PUSHINT
+    SWAP
+    104 STU
+    STREF
+    ENDC
+    0 PUSHINT
+    SENDRAWMSG
+  }>
+  $Cell$_fun_asSlice PROCINLINE:<{
+    CTOS
+  }>
+  $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee PROCINLINE:<{
+  }>
+  $DexRouter$_fun_checkValid PROCREF:<{
+    c2 SAVE
+    SAMEALTSAVE
+    s7 PUSH
+    IFJMP:<{
+      FALSE
+      0 PUSHINT
+      s0 s2 s1 XC2PU
+      $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee INLINECALLDICT
+    }>
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    SWAP
+    1 LDU
+    SWAP
+    0 NEQINT
+    IFJMP:<{
+      LDREF
+      DROP
+      $Cell$_fun_asSlice INLINECALLDICT
+      DUP
+      64 PLDSLICE
+      32 LDU
+      32 LDU
+      DROP
+      OVER
+      287440896 PUSHINT
+      EQUAL
+      IF:<{
+        s6 s7 PUSH2
+        ADD
+        OVER
+        1 LSHIFT#
+        ADD
+        10000000 PUSHINT
+        ADD
+        10000000 PUSHINT
+        ADD
+        s4 s(-1) PUXC
+        LESS
+        IFJMP:<{
+          FALSE
+          s4 POP
+          s1 s2 XCHG
+          $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee INLINECALLDICT
+          RETALT
+        }>
+      }>
+      OVER
+      288555008 PUSHINT
+      EQUAL
+      IF:<{
+        s5 s7 PUSH2
+        ADD
+        OVER
+        1 LSHIFT#
+        ADD
+        10000000 PUSHINT
+        ADD
+        10000000 PUSHINT
+        ADD
+        s1 s4 XCHG
+        LESS
+        IFJMP:<{
+          FALSE
+          s2 s3 XCHG2
+          $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee INLINECALLDICT
+          RETALT
+        }>
+      }>ELSE<{
+        s3 POP
+      }>
+      TRUE
+      s2 s3 XCHG2
+      $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee INLINECALLDICT
+    }>
+    NIP
+    FALSE
+    0 PUSHINT
+    s0 s2 s1 XC2PU
+    $ValidInfo$_constructor_isValid_op_payload_transfer_jetton_fee INLINECALLDICT
+  }>
+  $StateInit$_constructor_code_data PROCINLINE:<{
+  }>
+  $SendParameters$_constructor_value_to_mode_bounce_body_code_data PROCINLINE:<{
+    s3 s6 XCHG
+    s3 s4 XCHG
+  }>
+  $SendParameters$_constructor_to_value_mode_bounce_body PROCINLINE:<{
+    s1 s4 XCHG
+    s3 s3 s0 XCHG3
+    PUSHNULL
+    PUSHNULL
+  }>
+  $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
+  }>
+  $JettonPayload$_constructor_isStonFi_payload PROCINLINE:<{
+  }>
+  $DexRouter$_fun_msg_value PROCREF:<{
+    s4 PUSH
+    SUB
+  }>
+  $DexRouter$_fun_handleSwapDedustJetton PROCREF:<{
+    2 2 BLKDROP2
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    s7 s12 XCHG
+    s6 s11 XCHG
+    s5 s10 XCHG
+    s4 s9 XCHG
+    s3 s8 XCHG
+    s12 s11 s0 XCHG3
+    $DexRouter$_fun_msg_value INLINECALLDICT
+    <b 2 8 u, 0x15d995a08d553ae50abb02e767205d4d3e69d5d3dfb24c2b4fdef456d93c919e 256 u, b>spec PUSHREF
+    s9 PUSH
+    dedust_data INLINECALLDICT
+    $StateInit$_constructor_code_data INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    10000000 PUSHINT
+    3 PUSHINT
+    FALSE
+    B{b5ee9c7241010101001700002a000000006465706c6f7920666f722064656475737456222748} B>boc PUSHREF
+    s4 PUSH
+    s4 s6 XCHG
+    s3 s4 XCHG
+    s1 s7 s7 XCHG3
+    s0 s3 XCHG
+    $SendParameters$_constructor_value_to_mode_bounce_body_code_data INLINECALLDICT
+    $global_send INLINECALLDICT
+    SWAP
+    10000000 PUSHINT
+    SUB
+    s0 s12 PUXC
+    SUB
+    __tact_context_get_sender INLINECALLDICT
+    s12 s11 s0 XCHG3
+    3 PUSHINT
+    s13 s11 XCHG2
+    FALSE
+    PUSHNULL
+    s0 s14 XCHG2
+    17 s() PUSH
+    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $TokenTransfer$_store_cell INLINECALLDICT
+    s4 s10 XCHG
+    s3 s11 XCHG
+    s8 s9 s0 XCHG3
+    $SendParameters$_constructor_to_value_mode_bounce_body INLINECALLDICT
+    $global_send INLINECALLDICT
+    FALSE
+    s0 s8 XCHG2
+    $JettonPayload$_constructor_isStonFi_payload INLINECALLDICT
+    $JettonPayload$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s5 s5 s5 XCHG3
+    s0 s6 XCHG
+    s0 s4 XCHG
+    s0 s3 XCHG
+  }>
+  $DexRouter$_fun_handleSwapStonfiJetton PROCREF:<{
+    2 2 BLKDROP2
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    s7 s12 XCHG
+    s6 s11 XCHG
+    s5 s10 XCHG
+    s4 s9 XCHG
+    s3 s8 XCHG
+    s12 s11 s0 XCHG3
+    $DexRouter$_fun_msg_value INLINECALLDICT
+    <b 2 8 u, 0xbeca5636a91aa7b9e4c6decb89f9040ea61bc071c36d55c2c1f863d79ab288f6 256 u, b>spec PUSHREF
+    s9 PUSH
+    stonfi_data INLINECALLDICT
+    $StateInit$_constructor_code_data INLINECALLDICT
+    2DUP
+    $global_contractAddress INLINECALLDICT
+    10000000 PUSHINT
+    3 PUSHINT
+    FALSE
+    B{b5ee9c7241010101001700002a000000006465706c6f7920666f722073746f6e6669cf0a7142} B>boc PUSHREF
+    s4 PUSH
+    s4 s6 XCHG
+    s3 s4 XCHG
+    s1 s7 s7 XCHG3
+    s0 s3 XCHG
+    $SendParameters$_constructor_value_to_mode_bounce_body_code_data INLINECALLDICT
+    $global_send INLINECALLDICT
+    SWAP
+    10000000 PUSHINT
+    SUB
+    s0 s12 PUXC
+    SUB
+    __tact_context_get_sender INLINECALLDICT
+    s12 s11 s0 XCHG3
+    3 PUSHINT
+    s13 s11 XCHG2
+    FALSE
+    PUSHNULL
+    s0 s14 XCHG2
+    17 s() PUSH
+    $TokenTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+    $TokenTransfer$_store_cell INLINECALLDICT
+    s4 s10 XCHG
+    s3 s11 XCHG
+    s8 s9 s0 XCHG3
+    $SendParameters$_constructor_to_value_mode_bounce_body INLINECALLDICT
+    $global_send INLINECALLDICT
+    TRUE
+    s0 s8 XCHG2
+    $JettonPayload$_constructor_isStonFi_payload INLINECALLDICT
+    $JettonPayload$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s5 s5 s5 XCHG3
+    s0 s6 XCHG
+    s0 s4 XCHG
+    s0 s3 XCHG
+  }>
+  $DexRouter$_fun_checkValidForStonfiNative PROCREF:<{
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    s8 PUSH
+    IFJMP:<{
+      2DROP
+      FALSE
+    }>
+    s4 s5 PUSH2
+    ADD
+    10000000 PUSHINT
+    ADD
+    10000000 PUSHINT
+    ADD
+    ROT
+    ADD
+    LESS
+    IFJMP:<{
+      FALSE
+    }>
+    TRUE
+  }>
+  $DexRouter$_fun_checkValidForDedustNative PROCREF:<{
+    s7 PUSH
+    IFJMP:<{
+      DROP
+      FALSE
+    }>
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    s3 s5 PUSH2
+    ADD
+    10000000 PUSHINT
+    ADD
+    10000000 PUSHINT
+    ADD
+    ROT
+    ADD
+    LESS
+    IFJMP:<{
+      FALSE
+    }>
+    TRUE
+  }>
+  $DexRouter$_fun_getStonfiFwdAmount PROCREF:<{
+    s2 PUSH
+  }>
+  $DexRouter$_fun_getSeq PROCREF:<{
+    s5 PUSH
+  }>
+  $DexRouter$_fun_getProcessFee PROCREF:<{
+    s3 PUSH
+  }>
+  $DexRouter$_fun_getMiniumFee PROCREF:<{
+    DUP
+  }>
+  $DexRouter$_fun_getUserStonfiProxyAddr PROCREF:<{
+    <b 2 8 u, 0xbeca5636a91aa7b9e4c6decb89f9040ea61bc071c36d55c2c1f863d79ab288f6 256 u, b>spec PUSHREF
+    SWAP
+    stonfi_data INLINECALLDICT
+    $StateInit$_constructor_code_data INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
+  $DexRouter$_fun_getUserDedustProxyAddr PROCREF:<{
+    <b 2 8 u, 0x15d995a08d553ae50abb02e767205d4d3e69d5d3dfb24c2b4fdef456d93c919e 256 u, b>spec PUSHREF
+    SWAP
+    dedust_data INLINECALLDICT
+    $StateInit$_constructor_code_data INLINECALLDICT
+    $global_contractAddress INLINECALLDICT
+  }>
+  $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
+  }>
+  $DexRouter$_fun_forward PROCREF:<{
+    PUSHNULL
+    PUSHNULL
+    s2 PUSH
+    ISNULL
+    NOT
+    IF:<{
+      2DROP
+      $StateInit$_not_null INLINECALLDICT
+      SWAP
+    }>ELSE<{
+      s2 POP
+    }>
+    __tact_context_get INLINECALLDICT
+    s1 s3 XCHG
+    3 BLKDROP
+    __tact_my_balance INLINECALLDICT
+    SWAP
+    SUB
+    100000000 PUSHINT
+    LESS
+    IFJMP:<{
+      100000000 PUSHINT
+      0 PUSHINT
+      RAWRESERVE
+      s2 s4 XCHG
+      0 PUSHINT
+      s0 s3 XCHG
+      s0 s4 XCHG
+      130 PUSHINT
+      s2 s3 XCHG2
+      $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>
+    s2 s4 XCHG
+    0 PUSHINT
+    s0 s3 XCHG
+    s0 s4 XCHG
+    66 PUSHINT
+    s2 s3 XCHG2
+    $SendParameters$_constructor_bounce_to_value_mode_body_code_data INLINECALLDICT
+    $global_send INLINECALLDICT
+  }>
+  $DexRouter$_fun_reply PROCINLINE:<{
+    __tact_context_get_sender INLINECALLDICT
+    SWAP
+    TRUE
+    PUSHNULL
+    $DexRouter$_fun_forward INLINECALLDICT
+  }>
+  $DexRouter$_fun_notify PROCINLINE:<{
+    __tact_context_get_sender INLINECALLDICT
+    SWAP
+    FALSE
+    PUSHNULL
+    $DexRouter$_fun_forward INLINECALLDICT
+  }>
+  $DexRouter$_fun_requireNotStopped PROCREF:<{
+    40368 PUSHINT
+    s7 PUSH
+    NOT
+    THROWANYIFNOT
+  }>
+  $DexRouter$_fun_requireStopped PROCREF:<{
+    53296 PUSHINT
+    s7 PUSH
+    THROWANYIFNOT
+  }>
+  $DexRouter$_fun_stopped PROCREF:<{
+    s6 PUSH
+  }>
+  $DexRouter$_fun_requireOwner PROCREF:<{
+    __tact_context_get_sender INLINECALLDICT
+    s5 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    132 THROWIFNOT
+  }>
+  $DexRouter$_fun_owner PROCREF:<{
+    s4 PUSH
+  }>
+  $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
+  }>
+  $JettonTransferForwardPayload$_constructor_is_right_value PROCINLINE:<{
+  }>
+  $AdditionalInfo$_constructor_additional_info PROCINLINE:<{
+  }>
+  $DeployOk$_constructor_queryId PROCINLINE:<{
+  }>
+  $ChangeOwnerOk$_constructor_queryId_newOwner PROCINLINE:<{
+  }>
+  stonfi_data PROCREF:<{
+    NEWDICT
+    NEWC
+    SWAP
+    NEWC
+    STDICT
+    ENDC
+    SWAP
+    STREF
+    FALSE
+    SWAP
+    1 STI
+    MYADDR
+    STSLICER
+    SWAP
+    STSLICER
+    ENDC
+  }>
+  dedust_data PROCREF:<{
+    NEWDICT
+    NEWC
+    SWAP
+    NEWC
+    STDICT
+    ENDC
+    SWAP
+    STREF
+    FALSE
+    SWAP
+    1 STI
+    MYADDR
+    STSLICER
+    SWAP
+    STSLICER
+    ENDC
+  }>
+  $DexRouter$_internal_any_text PROCINLINE:<{
+    DROP
+  }>
+  $DexRouter$_internal_binary_TokenNotification PROCINLINE:<{
+    44535 PUSHINT
+    s3 PUSH
+    0 GTINT
+    THROWANYIFNOT
+    DUP
+    s7 s11 XCHG
+    s6 s10 XCHG
+    s5 s9 XCHG
+    s4 s8 XCHG
+    s3 s11 XCHG
+    s10 s9 s0 XCHG3
+    $DexRouter$_fun_checkValid INLINECALLDICT
+    NIP
+    s0 s2 XCHG
+    NOT
+    IF:<{
+      2DROP
+      s8 POP
+      __tact_context_get_sender INLINECALLDICT
+      PUSHNULL
+      0 PUSHINT
+      FALSE
+      B{b5ee9c724101010100130000220000000072657475726e206a6574746f6e303b6cc3} B>boc PUSHREF
+      $Cell$_fun_asSlice INLINECALLDICT
+      $JettonTransferForwardPayload$_constructor_is_right_value INLINECALLDICT
+      s13 PUSH
+      s7 s12 XCHG
+      s6 s15 XCHG
+      s0 s5 XCHG
+      s0 s14 XCHG
+      4 -ROLL
+      $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+      $JettonTransfer$_store_cell INLINECALLDICT
+      s4 s8 XCHG
+      s3 s7 XCHG
+      s6 s5 s0 XCHG3
+      s1 s4 XCHG
+      s1 s3 XCHG
+      FALSE
+      PUSHNULL
+      $DexRouter$_fun_forward INLINECALLDICT
+    }>ELSE<{
+      DUP
+      287440896 PUSHINT
+      EQUAL
+      IF:<{
+        s6 s8 XCHG
+        5 4 REVERSE
+        s3 s7 XCHG
+        s8 s7 s8 XCHG3
+        s9 s12 s11 PUSH3
+        s13 s11 s13 PUSH3
+        s13 PUSH
+        $DexRouter$_fun_handleSwapStonfiJetton INLINECALLDICT
+        s6 s8 XCHG
+        2 6 BLKSWAP
+      }>
+      DUP
+      288555008 PUSHINT
+      EQUAL
+      IF:<{
+        s8 s12 XCHG
+        s7 s11 XCHG
+        s6 s10 XCHG
+        s6 PUSH
+        s6 s10 XCHG
+        s5 s9 XCHG
+        s4 s8 XCHG
+        s3 s7 XCHG
+        ROT
+        $DexRouter$_fun_handleSwapDedustJetton INLINECALLDICT
+        3 4 BLKSWAP
+      }>ELSE<{
+        2DROP
+        s3 s10 XCHG
+        s2 s9 XCHG
+        s7 POP
+        s7 POP
+        2DROP
+      }>
+      4 3 BLKSWAP
+    }>
+  }>
+  $DexRouter$_internal_binary_SwapNativeInDedust PROCINLINE:<{
+    44535 PUSHINT
+    s8 PUSH
+    0 GTINT
+    THROWANYIFNOT
+    __tact_context_get INLINECALLDICT
+    DROP
+    NIP
+    26695 PUSHINT
+    s2 POP
+    s11 PUSH
+    GREATER
+    THROWANYIFNOT
+    OVER
+    $AdditionalInfo$_constructor_additional_info INLINECALLDICT
+    $AdditionalInfo$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s6 s15 XCHG
+    s5 s14 XCHG
+    s4 s13 XCHG
+    s3 s12 XCHG
+    s11 s10 s9 XCHG3
+    s7 PUSH
+    $DexRouter$_fun_checkValidForDedustNative INLINECALLDICT
+    NOT
+    IF:<{
+      7 7 BLKDROP2
+      s7 POP
+      s7 POP
+      __tact_context_get_sender INLINECALLDICT
+      B{b5ee9c7241010101000f00001a000000006e6f742076616c6964e188e24d} B>boc PUSHREF
+      s6 s8 XCHG
+      s5 s7 XCHG
+      s4 s6 XCHG
+      s3 s5 XCHG
+      s2 s4 XCHG
+      s2 s3 XCHG
+      FALSE
+      PUSHNULL
+      $DexRouter$_fun_forward INLINECALLDICT
+    }>ELSE<{
+      <b 2 8 u, 0x15d995a08d553ae50abb02e767205d4d3e69d5d3dfb24c2b4fdef456d93c919e 256 u, b>spec PUSHREF
+      __tact_context_get_sender INLINECALLDICT
+      dedust_data INLINECALLDICT
+      $StateInit$_constructor_code_data INLINECALLDICT
+      2DUP
+      $global_contractAddress INLINECALLDICT
+      s8 s11 XCHG
+      s7 s10 XCHG
+      s6 18 s() XCHG
+      s5 17 s() XCHG
+      s4 16 s() XCHG
+      s3 s15 XCHG
+      s14 s13 s12 XCHG3
+      $SwapNativeInDedust$_store_cell INLINECALLDICT
+      s0 s6 XCHG
+      FALSE
+      s0 s6 XCHG
+      $StateInit$_as_optional INLINECALLDICT
+      s1 s10 XCHG
+      s3 s9 XCHG
+      s8 s7 s0 XCHG3
+      s3 s6 XCHG
+      s5 s4 s0 XCHG3
+      s3 s3 s0 XCHG3
+      $DexRouter$_fun_forward INLINECALLDICT
+    }>
+  }>
+  $DexRouter$_internal_binary_SwapNativeInStonfi PROCINLINE:<{
+    44535 PUSHINT
+    s7 PUSH
+    0 GTINT
+    THROWANYIFNOT
+    __tact_context_get INLINECALLDICT
+    DROP
+    NIP
+    26695 PUSHINT
+    s2 POP
+    s10 PUSH
+    GREATER
+    THROWANYIFNOT
+    OVER
+    $AdditionalInfo$_constructor_additional_info INLINECALLDICT
+    $AdditionalInfo$_store_cell INLINECALLDICT
+    $global_emit INLINECALLDICT
+    s6 s14 XCHG
+    s5 s13 XCHG
+    s4 s12 XCHG
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s14 PUSH
+    $DexRouter$_fun_checkValidForStonfiNative INLINECALLDICT
+    NOT
+    IF:<{
+      7 7 BLKDROP2
+      s7 POP
+      __tact_context_get_sender INLINECALLDICT
+      B{b5ee9c7241010101000f00001a000000006e6f742076616c6964e188e24d} B>boc PUSHREF
+      s7 s8 XCHG
+      s6 s7 XCHG
+      s5 s6 XCHG
+      s4 s5 XCHG
+      s3 s4 XCHG
+      s2 s3 XCHG
+      FALSE
+      PUSHNULL
+      $DexRouter$_fun_forward INLINECALLDICT
+    }>ELSE<{
+      <b 2 8 u, 0xbeca5636a91aa7b9e4c6decb89f9040ea61bc071c36d55c2c1f863d79ab288f6 256 u, b>spec PUSHREF
+      __tact_context_get_sender INLINECALLDICT
+      stonfi_data INLINECALLDICT
+      $StateInit$_constructor_code_data INLINECALLDICT
+      2DUP
+      $global_contractAddress INLINECALLDICT
+      s7 s10 XCHG
+      s6 17 s() XCHG
+      s5 16 s() XCHG
+      s4 s15 XCHG
+      s3 s14 XCHG
+      s13 s12 s11 XCHG3
+      $SwapNativeInStonfi$_store_cell INLINECALLDICT
+      s0 s6 XCHG
+      FALSE
+      s0 s6 XCHG
+      $StateInit$_as_optional INLINECALLDICT
+      s10 s9 s0 XCHG3
+      s3 s8 XCHG
+      s7 s6 s0 XCHG3
+      s3 s5 XCHG
+      s1 s4 s0 XCHG3
+      s1 s3 XCHG
+      $DexRouter$_fun_forward INLINECALLDICT
+    }>
+  }>
+  $DexRouter$_internal_binary_TokenExcesses PROCINLINE:<{
+    DROP
+    54159 PUSHINT
+    THROWANY
+  }>
+  $DexRouter$_internal_binary_ChangeFwdFee PROCINLINE:<{
+    7 -ROLL
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    s2 POP
+    B{b5ee9c7241010101001a000030000000004368616e67654677644665652073756363657373234785a5} B>boc PUSHREF
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s2 XCHG
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  $DexRouter$_internal_binary_ChangeProcessFee PROCINLINE:<{
+    7 -ROLL
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    s3 POP
+    B{b5ee9c7241010101001e000038000000004368616e676550726f6365737346656520737563636573732acf4843} B>boc PUSHREF
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s1 s3 s0 XCHG3
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  $DexRouter$_internal_binary_ChangeMinimumFee PROCINLINE:<{
+    7 -ROLL
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    DROP
+    B{b5ee9c7241010101001e000038000000004368616e67654d696e696d756d4665652073756363657373d250ad32} B>boc PUSHREF
+    s6 s7 XCHG
+    s5 s6 XCHG
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s1 s3 s0 XCHG3
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  $DexRouter$_internal_binary_WithdrawInfo PROCINLINE:<{
+    s6 s11 XCHG
+    s5 s10 XCHG
+    s4 s9 XCHG
+    s3 s8 XCHG
+    s7 s11 s10 XCHG3
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    s0 s10 XCHG
+    IF:<{
+      s7 POP
+      s7 POP
+      s0 s4 XCHG
+      __tact_not_null INLINECALLDICT
+      s0 s8 XCHG
+      __tact_not_null INLINECALLDICT
+      64 PUSHINT
+      FALSE
+      B{b5ee9c72410101010015000026000000007769746864726177206e6174697665f9f41cce} B>boc PUSHREF
+      s4 s11 XCHG
+      $SendParameters$_constructor_to_value_mode_bounce_body INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>ELSE<{
+      s10 POP
+      s0 s7 XCHG
+      __tact_not_null INLINECALLDICT
+      999 PUSHINT
+      s0 s7 XCHG
+      __tact_not_null INLINECALLDICT
+      s0 s6 XCHG
+      __tact_not_null INLINECALLDICT
+      __tact_context_get_sender INLINECALLDICT
+      PUSHNULL
+      0 PUSHINT
+      FALSE
+      B{b5ee9c72410101010015000026000000007769746864726177206a6574746f6e60093ac7} B>boc PUSHREF
+      $Cell$_fun_asSlice INLINECALLDICT
+      $JettonTransferForwardPayload$_constructor_is_right_value INLINECALLDICT
+      s7 s12 XCHG
+      s6 s11 XCHG
+      $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload INLINECALLDICT
+      $JettonTransfer$_store_cell INLINECALLDICT
+      s3 s8 XCHG
+      s7 s6 s0 XCHG3
+      s1 s4 XCHG
+      FALSE
+      PUSHNULL
+      $DexRouter$_fun_forward INLINECALLDICT
+      s4 s6 XCHG
+      s4 s3 s5 XCHG3
+      s1 s2 XCHG
+    }>
+    s6 s5 XCHG2
+    s4 s4 s0 XCHG3
+    s1 s3 XCHG
+  }>
+  $DexRouter$_internal_binary_Deploy PROCINLINE:<{
+    $DeployOk$_constructor_queryId INLINECALLDICT
+    $DeployOk$_store_cell INLINECALLDICT
+    $DexRouter$_fun_notify INLINECALLDICT
+  }>
+  $DexRouter$_internal_text_6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df PROCINLINE:<{
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    $DexRouter$_fun_requireStopped INLINECALLDICT
+    s6 POP
+    FALSE
+    B{b5ee9c7241010101000d00001600000000526573756d656412d9e98a} B>boc PUSHREF
+    s1 s7 XCHG
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  $DexRouter$_internal_text_bcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501 PROCINLINE:<{
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    $DexRouter$_fun_requireNotStopped INLINECALLDICT
+    s6 POP
+    TRUE
+    B{b5ee9c7241010101000d0000160000000053746f707065646f94ddb2} B>boc PUSHREF
+    s1 s7 XCHG
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  $DexRouter$_internal_binary_ChangeOwner PROCINLINE:<{
+    s6 s8 XCHG
+    5 4 REVERSE
+    s3 s7 XCHG
+    s8 s7 s8 XCHG3
+    $DexRouter$_fun_requireOwner INLINECALLDICT
+    s4 POP
+    s6 s7 XCPU
+    $ChangeOwnerOk$_constructor_queryId_newOwner INLINECALLDICT
+    $ChangeOwnerOk$_store_cell INLINECALLDICT
+    s5 s7 XCHG
+    s4 s6 XCHG
+    s4 s3 s0 XCHG3
+    $DexRouter$_fun_reply INLINECALLDICT
+  }>
+  %getStonfiFwdAmount PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_getStonfiFwdAmount INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %getSeq PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_getSeq INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %getProcessFee PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_getProcessFee INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %getMiniumFee PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_getMiniumFee INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %getUserStonfiProxyAddr PROC:<{
+    __tact_verify_address INLINECALLDICT
+    $DexRouter$_contract_load INLINECALLDICT
+    7 ROLL
+    $DexRouter$_fun_getUserStonfiProxyAddr INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %getUserDedustProxyAddr PROC:<{
+    __tact_verify_address INLINECALLDICT
+    $DexRouter$_contract_load INLINECALLDICT
+    7 ROLL
+    $DexRouter$_fun_getUserDedustProxyAddr INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %stopped PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_stopped INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  %owner PROC:<{
+    $DexRouter$_contract_load INLINECALLDICT
+    $DexRouter$_fun_owner INLINECALLDICT
+    7 1 BLKDROP2
+  }>
+  lazy_deployment_completed PROC:<{
+    c4 PUSH
+    CTOS
+    1 LDI
+    SWAP
+  }>
+  $DexRouter$_contract_router_internal PROCREF:<{
+    c2 SAVE
+    SAMEALTSAVE
+    SWAP
+    IFJMP:<{
+      DROP
+      TRUE
+    }>
+    0 PUSHINT
+    OVER
+    SBITS
+    31 GTINT
+    IF:<{
+      DROP
+      DUP
+      32 PLDU
+    }>
+    DUP
+    1935855772 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $TokenNotification$_load INLINECALLDICT
+      1 4 BLKDROP2
+      $DexRouter$_internal_binary_TokenNotification INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3039744607 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $SwapNativeInDedust$_load INLINECALLDICT
+      1 9 BLKDROP2
+      $DexRouter$_internal_binary_SwapNativeInDedust INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    77161560 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $SwapNativeInStonfi$_load INLINECALLDICT
+      1 8 BLKDROP2
+      $DexRouter$_internal_binary_SwapNativeInStonfi INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3576854235 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $TokenExcesses$_load INLINECALLDICT
+      NIP
+      $DexRouter$_internal_binary_TokenExcesses INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1728951638 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeFwdFee$_load INLINECALLDICT
+      NIP
+      $DexRouter$_internal_binary_ChangeFwdFee INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    2162290971 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeProcessFee$_load INLINECALLDICT
+      NIP
+      $DexRouter$_internal_binary_ChangeProcessFee INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1407651501 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeMinimumFee$_load INLINECALLDICT
+      NIP
+      $DexRouter$_internal_binary_ChangeMinimumFee INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    3076232919 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $WithdrawInfo$_load INLINECALLDICT
+      1 5 BLKDROP2
+      $DexRouter$_internal_binary_WithdrawInfo INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    2490013878 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $Deploy$_load INLINECALLDICT
+      NIP
+      $DexRouter$_internal_binary_Deploy INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    2174598809 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ChangeOwner$_load INLINECALLDICT
+      1 2 BLKDROP2
+      $DexRouter$_internal_binary_ChangeOwner INLINECALLDICT
+      TRUE
+    }>
+    0 EQINT
+    IF:<{
+      DUP
+      HASHSU
+      DUP
+      49102922684337101841979563583256198294100324132395678439113188049283630228447 PUSHINT
+      EQUAL
+      IFJMP:<{
+        2DROP
+        $DexRouter$_internal_text_6c8f44f45fedb4cdfed4de8db14aa5b13ad55d430f759d0669210b74c48fe3df INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      85478235227686204299312064008631277118150318603456584517510472216578858763521 PUSHINT
+      EQUAL
+      IFJMP:<{
+        DROP
+        $DexRouter$_internal_text_bcfaf776907c719cc8d379d8f194aaaa27e8ca2871cd591781721f215a454501 INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      DUP
+      SBITS
+      31 GTINT
+      IFJMP:<{
+        32 PUSHINT
+        SDSKIPFIRST
+        $DexRouter$_internal_any_text INLINECALLDICT
+        TRUE
+        RETALT
+      }>
+      DROP
+    }>ELSE<{
+      DROP
+    }>
+    FALSE
+  }>
+  recv_internal PROC:<{
+    SWAP
+    CTOS
+    4 LDU
+    SWAP
+    1 PUSHINT
+    AND
+    NEGATE
+    SWAP
+    LDMSGADDR
+    SWAP
+    __tact_verify_address INLINECALLDICT
+    s0 s4 s2 PUXCPU
+    s0 s3 XCHG
+    4 TUPLE
+    __tact_context SETGLOB
+    s0 s2 XCHG
+    __tact_context_sender SETGLOB
+    $DexRouter$_contract_load INLINECALLDICT
+    2 7 BLKSWAP
+    $DexRouter$_contract_router_internal INLINECALLDICT
+    130 THROWIFNOT
+    $DexRouter$_contract_store INLINECALLDICT
+  }>
+}END>c

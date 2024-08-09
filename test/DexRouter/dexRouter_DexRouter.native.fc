@@ -1,0 +1,36 @@
+cell stonfi_code() asm "<b 2 8 u, 0xbeca5636a91aa7b9e4c6decb89f9040ea61bc071c36d55c2c1f863d79ab288f6 256 u, b>spec PUSHREF";
+cell dedust_code() asm "<b 2 8 u, 0x15d995a08d553ae50abb02e767205d4d3e69d5d3dfb24c2b4fdef456d93c919e 256 u, b>spec PUSHREF";
+
+
+
+(cell) stonfi_data(slice user) inline_ref {
+
+    cell contracts = new_dict();
+
+    udict_set_ref(contracts, 16, 15976, stonfi_code());
+
+    ;; Build cell
+    builder b = begin_cell();
+    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
+    b = b.store_int(false, 1);
+    b = b.store_slice(my_address());
+    b = b.store_slice(user);
+
+    return b.end_cell();
+}
+
+(cell) dedust_data(slice user) inline_ref {
+
+    cell contracts = new_dict();
+
+    udict_set_ref(contracts, 16, 11381, dedust_code());
+
+    ;; Build cell
+    builder b = begin_cell();
+    b = b.store_ref(begin_cell().store_dict(contracts).end_cell());
+    b = b.store_int(false, 1);
+    b = b.store_slice(my_address());
+    b = b.store_slice(user);
+
+    return b.end_cell();
+}
